@@ -7,4 +7,5 @@ export class CreateTodoDto {
   @MinLength(1)
   @ApiProperty()
   text: string;
+  userId: string;
 }
