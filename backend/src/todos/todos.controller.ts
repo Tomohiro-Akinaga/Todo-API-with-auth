@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
@@ -32,8 +33,12 @@ export class TodosController {
 
   @Get(':id')
   @ApiOkResponse({ type: TodoEntity })
-  findOne(@Param('id') id: string) {
-    return this.todosService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const todo = await this.todosService.findOne(id);
+    if (!todo) {
+      throw new NotFoundException(`Todo with id ${id} does not exist`);
+    }
+    return todo;
   }
 
   @Patch(':id')
